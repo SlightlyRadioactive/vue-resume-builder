@@ -1,16 +1,37 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { defineProps, ref, onMounted, defineEmits, watch } from 'vue'
 
-const text = ref('Description')
+const props = defineProps({
+  text: {
+    type: String,
+    default: 'Description',
+  },
+})
+
+const description = ref(props.text)
 const textarea = ref<HTMLTextAreaElement | null>(null)
+
+watch(
+  () => props.text,
+  (newText) => {
+    description.value = newText
+  },
+)
+
+const emit = defineEmits(['update'])
+
+const updateDescription = (value: string) => {
+  description.value = value
+  emit('update', value)
+}
 
 const resizeTextarea = () => {
   if (!textarea.value) return
   textarea.value.style.height = 'auto' // Reset height
   textarea.value.style.height = textarea.value.scrollHeight + 'px' // Set new height
+  updateDescription(textarea.value.value)
 }
 
-// Ensure initial resizing when the component is mounted
 onMounted(() => {
   resizeTextarea()
 })
@@ -18,7 +39,7 @@ onMounted(() => {
 
 <template>
   <textarea
-    v-model="text"
+    v-model="description"
     @input="resizeTextarea"
     ref="textarea"
     rows="1"

@@ -1,49 +1,67 @@
 <script lang="ts" setup>
-import { ref, defineProps } from 'vue'
-import EditField from './EditField.vue'
-import EditTextArea from './EditTextArea.vue'
+import { defineProps, defineEmits, computed } from 'vue'
+import EditField from '@/components/EditField.vue'
+import EditTextArea from '@/components/EditTextArea.vue'
+import DelButton from '@/components/DelButton.vue'
 
-const isVisible = ref(true)
+const props = defineProps({
+  info: { type: Object, default: () => ({}) },
+})
 
-defineProps({
-  place: {
-    type: String,
-    default: 'Place',
+const json = computed({
+  get() {
+    return {
+      place: props.info.place || 'Place',
+      title: props.info.title || 'Title',
+      location: props.info.location || 'Location, FS',
+      date_start: props.info.date_start || 'Start Date',
+      date_end: props.info.date_end || 'End Date',
+      description: props.info.description || 'Description',
+    }
   },
-  title: {
-    type: String,
-    default: 'Role',
+  set(value) {
+    return value
   },
 })
+
+const emit = defineEmits(['remove', 'update'])
+
+const updateField = (field: string, value: string) => {
+  emit('update', { ...json.value, [field]: value })
+}
 </script>
 
 <template>
-  <div v-if="isVisible" class="group flex columns-2">
+  <div class="group flex columns-2">
     <div class="w-full group-hover:pe-1">
-      <div v-if="isVisible" class="w-full flex justify-between">
+      <div class="w-full flex justify-between">
         <div class="flex flex-col">
-          <EditField :text="place" class="font-bold" />
-          <EditField :text="title" />
+          <EditField
+            :text="json.place"
+            class="font-bold"
+            @update="(value) => updateField('place', value)"
+          />
+          <EditField :text="json.title" @update="(value) => updateField('title', value)" />
         </div>
         <div class="flex flex-col items-end">
-          <EditField text="Location, FS" />
+          <EditField :text="json.location" @update="(value) => updateField('location', value)" />
           <span>
-            <EditField text="Start Date" />
-            -
-            <EditField text="End Date" />
+            <EditField
+              :text="json.date_start"
+              @update="(value) => updateField('date_start', value)"
+            />
+            <span> - </span>
+            <EditField :text="json.date_end" @update="(value) => updateField('date_end', value)" />
           </span>
         </div>
       </div>
-      <EditTextArea />
+      <EditTextArea
+        :text="json.description"
+        @update="(value) => updateField('description', value)"
+      />
     </div>
     <div class="flex">
-      <button
-        type="button"
-        @click="isVisible = false"
-        class="hidden group-hover:inline rounded-2xl px-1 hover:bg-gray-800"
-      >
-        ❌
-      </button>
+      <DelButton @click="emit('remove')" />
     </div>
   </div>
 </template>

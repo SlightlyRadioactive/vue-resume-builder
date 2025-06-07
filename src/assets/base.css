@@ -35,3 +35,8 @@ textarea {
   resize: none;
   overflow-y: hidden;
 }
+
+button {
+  cursor: pointer;
+  font: inherit;
+}

@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import { ref, nextTick } from 'vue'
+import { defineEmits, defineProps, ref, nextTick, watch } from 'vue'
+
+const emit = defineEmits(['update'])
 
 const props = defineProps({
   text: {
@@ -17,6 +19,15 @@ const inputWidth = ref('auto')
 const inputValue = ref(props.text)
 const spanRef = ref<HTMLSpanElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
+
+watch(
+  () => props.text,
+  (newText) => {
+    inputValue.value = newText
+    resizeField()
+  },
+)
+
 nextTick(() => {
   resizeField()
 })
@@ -36,6 +47,7 @@ const blurInput = () => {
   isActive.value = false
   nextTick(() => {
     inputValue.value = inputValue.value.trim() || props.text
+    emit('update', inputValue.value)
     resizeField()
   })
 }
