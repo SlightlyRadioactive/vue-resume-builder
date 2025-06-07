@@ -72,10 +72,6 @@ const loadJSON = () => {
   }
   input.click()
 }
-
-document.onclick = () => {
-  console.log(name.value)
-}
 </script>
 
 <template>
