@@ -1,34 +1,25 @@
 <script lang="ts" setup>
 import { ref, onMounted, watch } from 'vue'
 
-const { text = 'Description' } = defineProps<{ text?: string }>()
-const description = ref(text)
+const emit = defineEmits(['update:modelValue'])
+
+const props = withDefaults(defineProps<{ modelValue?: string }>(), { modelValue: 'Description' })
+const description = ref(props.modelValue)
 const textarea = ref<HTMLTextAreaElement | null>(null)
 
 watch(
-  () => text,
-  (newText) => {
-    description.value = newText
-  },
+  () => props.modelValue,
+  (newText) => (description.value = newText),
 )
-
-const emit = defineEmits(['update'])
-
-const updateDescription = (value: string) => {
-  description.value = value
-  emit('update', value)
-}
 
 const resizeTextarea = () => {
   if (!textarea.value) return
   textarea.value.style.height = 'auto' // Reset height
   textarea.value.style.height = textarea.value.scrollHeight + 'px' // Set new height
-  updateDescription(textarea.value.value)
+  emit('update:modelValue', description.value)
 }
 
-onMounted(() => {
-  resizeTextarea()
-})
+onMounted(resizeTextarea)
 </script>
 
 <template>

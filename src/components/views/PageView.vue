@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 
 // Components
 import EditField from '@/components/EditField.vue'
@@ -73,6 +73,13 @@ const loadJSON = () => {
           projects: { ...DEFAULT_DATA.projects, list: json.projects?.list || [] },
           extraInfo: { ...DEFAULT_DATA.extraInfo, ...json.extraInfo },
         }
+
+        //Trigger resize for all textareas
+        await nextTick()
+        document.querySelectorAll('textarea').forEach((textarea) => {
+          textarea.dispatchEvent(new Event('input'))
+          textarea.dispatchEvent(new Event('blur'))
+        })
       } catch (err) {
         console.error('Error parsing JSON:', err)
       }
@@ -110,10 +117,7 @@ const loadJSON = () => {
 
         <!--Summary-->
         <OptSection :text="data.summary.title" @update="(value) => (data.summary.title = value)">
-          <EditTextArea
-            :text="data.summary.text"
-            @update="(value) => (data.summary.text = value)"
-          />
+          <EditTextArea v-model="data.summary.text" />
         </OptSection>
 
         <!--Experience-->
@@ -161,20 +165,13 @@ const loadJSON = () => {
           :text="data.extraInfo.title"
           @update="(value) => (data.extraInfo.title = value)"
         >
-          <EditTextArea
-            :text="data.extraInfo.text"
-            @update="(value) => (data.extraInfo.text = value)"
-          />
+          <EditTextArea v-model="data.extraInfo.text" />
         </OptSection>
       </div>
     </div>
   </section>
   <div class="flex justify-center pb-20 gap-2">
-    <button
-      type="button"
-      @click="console.log('Download PDF clicked')"
-      class="btn bg-black hover:bg-gray-800"
-    >
+    <button type="button" @click="console.log('PDF')" class="btn bg-black hover:bg-gray-800">
       Download PDF
     </button>
     <button type="button" @click="saveJSON" class="btn bg-gray-500 hover:bg-gray-700">

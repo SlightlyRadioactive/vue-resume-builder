@@ -4,29 +4,25 @@ import EditField from '@/components/EditField.vue'
 import EditTextArea from '@/components/EditTextArea.vue'
 import DelButton from '@/components/DelButton.vue'
 
-const props = defineProps({
-  info: { type: Object, default: () => ({}) },
-})
-
-const json = computed({
-  get() {
-    return {
-      place: props.info.place || 'Place',
-      title: props.info.title || 'Title',
-      location: props.info.location || 'Location, FS',
-      date_start: props.info.date_start || 'Start Date',
-      date_end: props.info.date_end || 'End Date',
-      description: props.info.description || 'Description',
-    }
-  },
-  set(value) {
-    return value
-  },
-})
-
 const emit = defineEmits(['remove', 'update'])
 
-const updateField = (field: string, value: string) => {
+type InfoKey = 'place' | 'title' | 'location' | 'date_start' | 'date_end' | 'description'
+type Info = Partial<Record<InfoKey, string>>
+
+const props = withDefaults(defineProps<{ info?: Info }>(), { info: () => ({}) })
+
+const defaults: Record<InfoKey, string> = {
+  place: 'Place',
+  title: 'Title',
+  location: 'Location, FS',
+  date_start: 'Start Date',
+  date_end: 'End Date',
+  description: 'Description',
+}
+
+const json = computed(() => ({ ...defaults, ...props.info }))
+
+const updateField = (field: InfoKey, value: string) => {
   emit('update', { ...json.value, [field]: value })
 }
 </script>
@@ -56,8 +52,8 @@ const updateField = (field: string, value: string) => {
         </div>
       </div>
       <EditTextArea
-        :text="json.description"
-        @update="(value) => updateField('description', value)"
+        v-model="json.description"
+        @update:model-value="(value) => updateField('description', value)"
       />
     </div>
     <div class="flex">

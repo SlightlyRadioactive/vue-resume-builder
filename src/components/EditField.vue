@@ -1,26 +1,23 @@
 <script lang="ts" setup>
-import { ref, nextTick, watch } from 'vue'
+import { ref, nextTick, watch, onMounted } from 'vue'
 
 const emit = defineEmits(['update'])
 
-const { text = 'Description', required = false } = defineProps<{
-  text?: string
-  required?: boolean
-}>()
+const props = withDefaults(defineProps<{ text?: string; required?: boolean }>(), {
+  text: 'Description',
+  required: false,
+})
 
 const isActive = ref(false)
 const inputWidth = ref('auto')
-const inputValue = ref(text)
+const inputValue = ref(props.text)
 const spanRef = ref<HTMLSpanElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 
 const focusInput = () => {
   if (!inputRef.value) return
-
   isActive.value = true
-  nextTick(() => {
-    inputRef.value?.focus()
-  })
+  inputRef.value?.focus()
 }
 
 const blurInput = () => {
@@ -28,7 +25,7 @@ const blurInput = () => {
 
   isActive.value = false
   nextTick(() => {
-    inputValue.value = inputValue.value.trim() || text
+    inputValue.value = inputValue.value.trim() || props.text
     emit('update', inputValue.value)
     resizeField()
   })
@@ -45,16 +42,14 @@ const resizeField = () => {
 }
 
 watch(
-  () => text,
+  () => props.text,
   (newText) => {
     inputValue.value = newText
     resizeField()
   },
 )
 
-nextTick(() => {
-  resizeField()
-})
+onMounted(resizeField)
 </script>
 
 <template>
@@ -64,13 +59,13 @@ nextTick(() => {
       ref="inputRef"
       v-show="isActive"
       v-model="inputValue"
-      :required="required"
+      :required="props.required"
       @input="resizeField"
       @blur="blurInput"
       :style="{ width: inputWidth }"
       aria-label="Editable text field"
     />
-    <span ref="spanRef" v-show="!isActive" @click="focusInput">
+    <span ref="spanRef" class="whitespace-pre" v-show="!isActive" @click="focusInput">
       {{ inputValue }}
     </span>
   </span>
