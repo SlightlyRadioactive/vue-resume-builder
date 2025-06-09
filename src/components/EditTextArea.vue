@@ -1,18 +1,12 @@
 <script lang="ts" setup>
-import { defineProps, ref, onMounted, defineEmits, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
-const props = defineProps({
-  text: {
-    type: String,
-    default: 'Description',
-  },
-})
-
-const description = ref(props.text)
+const { text = 'Description' } = defineProps<{ text?: string }>()
+const description = ref(text)
 const textarea = ref<HTMLTextAreaElement | null>(null)
 
 watch(
-  () => props.text,
+  () => text,
   (newText) => {
     description.value = newText
   },
@@ -39,10 +33,10 @@ onMounted(() => {
 
 <template>
   <textarea
+    rows="1"
+    ref="textarea"
+    class="w-full"
     v-model="description"
     @input="resizeTextarea"
-    ref="textarea"
-    rows="1"
-    class="w-full"
   ></textarea>
 </template>

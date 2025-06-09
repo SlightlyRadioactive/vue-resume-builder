@@ -1,15 +1,9 @@
 <script lang="ts" setup>
-import { defineProps, defineEmits } from 'vue'
 import EditField from '@/components/EditField.vue'
 
 const emit = defineEmits(['update'])
 
-defineProps({
-  text: {
-    type: String,
-    default: 'Title',
-  },
-})
+const { text = 'Title' } = defineProps<{ text?: string }>()
 </script>
 
 <template>

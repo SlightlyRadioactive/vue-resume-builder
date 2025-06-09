@@ -1,36 +1,18 @@
 <script lang="ts" setup>
-import { defineEmits, defineProps, ref, nextTick, watch } from 'vue'
+import { ref, nextTick, watch } from 'vue'
 
 const emit = defineEmits(['update'])
 
-const props = defineProps({
-  text: {
-    type: String,
-    default: 'Description',
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-})
+const { text = 'Description', required = false } = defineProps<{
+  text?: string
+  required?: boolean
+}>()
 
 const isActive = ref(false)
 const inputWidth = ref('auto')
-const inputValue = ref(props.text)
+const inputValue = ref(text)
 const spanRef = ref<HTMLSpanElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
-
-watch(
-  () => props.text,
-  (newText) => {
-    inputValue.value = newText
-    resizeField()
-  },
-)
-
-nextTick(() => {
-  resizeField()
-})
 
 const focusInput = () => {
   if (!inputRef.value) return
@@ -46,7 +28,7 @@ const blurInput = () => {
 
   isActive.value = false
   nextTick(() => {
-    inputValue.value = inputValue.value.trim() || props.text
+    inputValue.value = inputValue.value.trim() || text
     emit('update', inputValue.value)
     resizeField()
   })
@@ -61,6 +43,18 @@ const resizeField = () => {
     isActive.value = true
   })
 }
+
+watch(
+  () => text,
+  (newText) => {
+    inputValue.value = newText
+    resizeField()
+  },
+)
+
+nextTick(() => {
+  resizeField()
+})
 </script>
 
 <template>

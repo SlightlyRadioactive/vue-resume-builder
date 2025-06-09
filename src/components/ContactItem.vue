@@ -1,16 +1,10 @@
 <script lang="ts" setup>
-import { defineProps, defineEmits } from 'vue'
 import EditField from '@/components/EditField.vue'
 import DelButton from '@/components/DelButton.vue'
 
-defineProps({
-  text: {
-    type: String,
-    default: 'Contact',
-  },
-})
-
 const emit = defineEmits(['remove', 'update'])
+
+const { text = 'Contact' } = defineProps<{ text?: string }>()
 </script>
 
 <template>

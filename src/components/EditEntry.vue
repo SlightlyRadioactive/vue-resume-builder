@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineProps, defineEmits, computed } from 'vue'
+import { computed } from 'vue'
 import EditField from '@/components/EditField.vue'
 import EditTextArea from '@/components/EditTextArea.vue'
 import DelButton from '@/components/DelButton.vue'
@@ -37,8 +37,8 @@ const updateField = (field: string, value: string) => {
       <div class="w-full flex justify-between">
         <div class="flex flex-col">
           <EditField
-            :text="json.place"
             class="font-bold"
+            :text="json.place"
             @update="(value) => updateField('place', value)"
           />
           <EditField :text="json.title" @update="(value) => updateField('title', value)" />
