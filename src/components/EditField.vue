@@ -25,7 +25,7 @@ const blurInput = () => {
 
   isActive.value = false
   nextTick(() => {
-    inputValue.value = inputValue.value.trim() || props.text
+    inputValue.value = inputValue.value || props.text
     emit('update', inputValue.value)
     resizeField()
   })
@@ -36,7 +36,13 @@ const resizeField = () => {
 
   isActive.value = false
   nextTick(() => {
-    inputWidth.value = `${(spanRef.value?.offsetWidth || 0) + 1}px`
+    if (spanRef.value) {
+      const lineHeight = parseFloat(spanRef.value.style.lineHeight || '0')
+      spanRef.value.style.wordBreak =
+        spanRef.value.offsetHeight > lineHeight ? 'break-all' : 'normal'
+
+      inputWidth.value = `${(spanRef.value?.offsetWidth || 0) + 1}px`
+    }
     isActive.value = true
   })
 }
