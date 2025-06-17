@@ -4,9 +4,9 @@ import { ref, nextTick } from 'vue'
 // Components
 import EditField from '@/components/EditField.vue'
 import ContactItem from '@/components/ContactItem.vue'
-import OptSection from '@/components/OptSection.vue'
+import EditSection from '@/components/EditSection.vue'
+import ListSection from '@/components/ListSection.vue'
 import EditTextArea from '@/components/EditTextArea.vue'
-import EditEntry from '@/components/EditEntry.vue'
 import AddButton from '@/components/AddButton.vue'
 import DelButton from '@/components/DelButton.vue'
 
@@ -48,7 +48,7 @@ const DEFAULT_DATA: ResumeData = {
 const data = ref(structuredClone(DEFAULT_DATA))
 
 const saveJSON = () => {
-  const load_data = JSON.stringify(data.value)
+  const load_data = JSON.stringify(data.value, null, 2)
 
   const link = Object.assign(document.createElement('a'), {
     href: URL.createObjectURL(new Blob([load_data], { type: 'application/json' })),
@@ -125,52 +125,36 @@ const loadJSON = () => {
         </div>
 
         <!--Summary-->
-        <OptSection :text="data.summary.title" @update="(value) => (data.summary.title = value)">
+        <EditSection :text="data.summary.title" @update="(value) => (data.summary.title = value)">
           <EditTextArea v-model="data.summary.text" />
-        </OptSection>
+        </EditSection>
 
         <!--Experience-->
-        <OptSection
-          class="group/add"
-          text="Experience"
-          @update="(value) => (data.works.title = value)"
-        >
-          <EditEntry
-            v-for="(work, index) in data.works.list"
-            :key="index"
-            :info="work"
-            @remove="data.works.list.splice(index, 1)"
-            @update="(value) => (data.works.list[index] = value)"
-          />
-          <AddButton @click="data.works.list.push(...DEFAULT_DATA.works.list)" />
-        </OptSection>
+        <ListSection
+          :data="data.works"
+          @add="data.works.list.push(...DEFAULT_DATA.works.list)"
+          @update="(value) => (data.works = value)"
+          @remove="(value) => data.works.list.splice(value, 1)"
+        />
 
         <!--Education-->
-        <OptSection text="Education" @update="(value) => (data.degrees.title = value)">
-          <EditEntry
-            v-for="(degree, index) in data.degrees.list"
-            :key="index"
-            :info="degree"
-            @remove="data.degrees.list.splice(index, 1)"
-            @update="(value) => (data.degrees.list[index] = value)"
-          />
-          <AddButton @click="data.degrees.list.push(...DEFAULT_DATA.degrees.list)" />
-        </OptSection>
+        <ListSection
+          :data="data.degrees"
+          @add="data.degrees.list.push(...DEFAULT_DATA.degrees.list)"
+          @update="(value) => (data.degrees = value)"
+          @remove="(value) => data.degrees.list.splice(value, 1)"
+        />
 
         <!--Projects-->
-        <OptSection text="Projects" @update="(value) => (data.projects.title = value)">
-          <EditEntry
-            v-for="(project, index) in data.projects.list"
-            :key="index"
-            :info="project"
-            @remove="data.projects.list.splice(index, 1)"
-            @update="(value) => (data.projects.list[index] = value)"
-          />
-          <AddButton @click="data.projects.list.push(...DEFAULT_DATA.projects.list)" />
-        </OptSection>
+        <ListSection
+          :data="data.projects"
+          @add="data.projects.list.push(...DEFAULT_DATA.projects.list)"
+          @update="(value) => (data.projects = value)"
+          @remove="(value) => data.projects.list.splice(value, 1)"
+        />
 
         <!--Additional Info-->
-        <OptSection
+        <EditSection
           :text="data.extraInfo.title"
           @update="(value) => (data.extraInfo.title = value)"
         >
@@ -196,7 +180,7 @@ const loadJSON = () => {
             </div>
             <AddButton @click="data.extraInfo.list.push(...DEFAULT_DATA.extraInfo.list)" />
           </div>
-        </OptSection>
+        </EditSection>
       </div>
     </div>
   </section>
