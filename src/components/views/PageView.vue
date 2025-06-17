@@ -77,10 +77,22 @@ const loadJSON = () => {
           ...json,
           contacts: json.contacts || DEFAULT_DATA.contacts,
           summary: { ...DEFAULT_DATA.summary, ...json.summary },
-          works: { ...DEFAULT_DATA.works, list: json.works?.list || [] },
-          degrees: { ...DEFAULT_DATA.degrees, list: json.degrees?.list || [] },
-          projects: { ...DEFAULT_DATA.projects, list: json.projects?.list || [] },
-          extraInfo: { ...DEFAULT_DATA.extraInfo, ...json.extraInfo },
+          works: {
+            ...DEFAULT_DATA.works,
+            title: json.works?.title || 'Experience',
+            list: json.works?.list || [],
+          },
+          degrees: {
+            ...DEFAULT_DATA.degrees,
+            title: json.degrees?.title || 'Degrees',
+            list: json.degrees?.list || [],
+          },
+          projects: {
+            ...DEFAULT_DATA.projects,
+            title: json.projects?.title || 'Projects',
+            list: json.projects?.list || [],
+          },
+          extraInfo: { ...DEFAULT_DATA.extraInfo, title: json.extraInfo?.title, ...json.extraInfo },
         }
 
         //Trigger resize for all textareas
