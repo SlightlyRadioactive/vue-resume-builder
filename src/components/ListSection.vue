@@ -6,9 +6,7 @@ import AddButton from '@/components/AddButton.vue'
 
 type ListItemKeys = 'place' | 'title' | 'date_end' | 'date_start' | 'description' | 'location'
 
-type ListItem = {
-  [K in ListItemKeys]?: string
-}
+type ListItem = { [K in ListItemKeys]?: string }
 
 interface Data {
   title?: string
@@ -19,17 +17,18 @@ const props = withDefaults(defineProps<{ data: Data }>(), {
   data: () => ({ title: 'Title', list: [] }),
 })
 
-const emit = defineEmits(['add', 'update', 'remove'])
+const emit = defineEmits(['add', 'update'])
 const info = ref({ ...props.data })
 
-const updateSection = (field: 'title', value: string): void => {
-  emit('update', { ...info.value, [field]: value })
-}
-
-const updateListItem = (index: number, value: ListItem): void => {
+const updateList = (index: number, value: ListItem): void => {
   const newList = info.value.list ? [...info.value.list] : []
   newList[index] = value
   emit('update', { ...info.value, list: newList })
+}
+
+const removeItem = (index: number): void => {
+  info.value.list?.splice(index, 1)
+  emit('update', { ...info.value })
 }
 
 watch(
@@ -42,14 +41,14 @@ watch(
   <EditSection
     class="group/add"
     :text="info.title"
-    @update="(value) => updateSection('title', value)"
+    @update="(value) => emit('update', { ...info, title: value })"
   >
     <EditEntry
       v-for="(item, index) in info.list"
       :key="index"
       :info="item"
-      @remove="emit('remove', index)"
-      @update="(value) => updateListItem(index, value)"
+      @remove="removeItem(index)"
+      @update="(value) => updateList(index, value)"
     />
     <AddButton @click="emit('add')" />
   </EditSection>

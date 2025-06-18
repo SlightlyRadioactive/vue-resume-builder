@@ -8,7 +8,7 @@ import EditSection from '@/components/EditSection.vue'
 import ListSection from '@/components/ListSection.vue'
 import EditTextArea from '@/components/EditTextArea.vue'
 import AddButton from '@/components/AddButton.vue'
-import DelButton from '@/components/DelButton.vue'
+import ExtraInfo from '../ExtraInfo.vue'
 
 // Static data
 interface ResumeEntry {
@@ -108,6 +108,13 @@ const loadJSON = () => {
   })
   input.click()
 }
+
+function safeStructuredClone<T>(obj: T): T {
+  if (typeof structuredClone === 'function') {
+    return structuredClone(obj)
+  }
+  return JSON.parse(JSON.stringify(obj))
+}
 </script>
 
 <template>
@@ -146,7 +153,6 @@ const loadJSON = () => {
           :data="data.works"
           @add="data.works.list.push(...DEFAULT_DATA.works.list)"
           @update="(value) => (data.works = value)"
-          @remove="(value) => data.works.list.splice(value, 1)"
         />
 
         <!--Education-->
@@ -154,7 +160,6 @@ const loadJSON = () => {
           :data="data.degrees"
           @add="data.degrees.list.push(...DEFAULT_DATA.degrees.list)"
           @update="(value) => (data.degrees = value)"
-          @remove="(value) => data.degrees.list.splice(value, 1)"
         />
 
         <!--Projects-->
@@ -162,37 +167,15 @@ const loadJSON = () => {
           :data="data.projects"
           @add="data.projects.list.push(...DEFAULT_DATA.projects.list)"
           @update="(value) => (data.projects = value)"
-          @remove="(value) => data.projects.list.splice(value, 1)"
         />
 
         <!--Additional Info-->
-        <EditSection
-          :text="data.extraInfo.title"
-          @update="(value) => (data.extraInfo.title = value)"
-        >
-          <div class="group/add w-full flex flex-col">
-            <div v-for="(entry, entryIndex) in data.extraInfo.list" :key="entryIndex" class="group">
-              <EditField
-                class="font-bold"
-                :text="entry.title"
-                :required="true"
-                @update="(value) => (entry.title = value)"
-              />
-              <DelButton @click="data.extraInfo.list.splice(entryIndex, 1)" />
-              <span>:</span>
-              <span v-for="(item, index) in entry.items" :key="index">
-                <ContactItem
-                  :text="item"
-                  @remove="entry.items.splice(index, 1)"
-                  @update="(value) => (entry.items[index] = value)"
-                />
-                <span v-if="index < entry.items.length - 1">|</span>
-              </span>
-              <AddButton @click="entry.items.push('Item')" />
-            </div>
-            <AddButton @click="data.extraInfo.list.push(...DEFAULT_DATA.extraInfo.list)" />
-          </div>
-        </EditSection>
+        <ExtraInfo
+          :data="data.extraInfo"
+          @add="data.extraInfo.list.push(safeStructuredClone(DEFAULT_DATA.extraInfo.list[0]))"
+          @addItem="(value) => data.extraInfo.list[value].items.push('Item')"
+          @update="(value) => (data.extraInfo = value)"
+        />
       </div>
     </div>
   </section>
