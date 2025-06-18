@@ -192,6 +192,6 @@ function safeStructuredClone<T>(obj: T): T {
   </div>
   <footer class="text-center text-gray-500 text-xs">
     <p>Vue Resume Builder</p>
-    <p>© 2023 SlightlyRadioactive</p>
+    <p>© {{ new Date().getFullYear() }} SlightlyRadioactive</p>
   </footer>
 </template>
