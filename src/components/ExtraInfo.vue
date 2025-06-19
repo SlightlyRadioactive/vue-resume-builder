@@ -54,15 +54,14 @@ watch(
     @update="(value) => emit('update', { ...info, title: value })"
   >
     <div class="group/add w-full flex flex-col">
-      <div v-for="(entry, entryIndex) in info.list" :key="entryIndex" class="group">
+      <div v-for="(entry, entryIndex) in info.list" :key="entryIndex">
+        <DelButton @click="removeLine(entryIndex)" group="add" />
         <EditField
           class="font-bold"
           :text="entry.title"
           :required="true"
           @update="updateList(entryIndex, $event)"
         />
-        <DelButton @click="removeLine(entryIndex)" />
-        <span>:</span>
         <span v-for="(item, index) in entry.items" :key="index">
           <InlineItem
             :text="item"

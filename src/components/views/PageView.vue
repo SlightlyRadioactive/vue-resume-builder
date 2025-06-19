@@ -41,7 +41,7 @@ const DEFAULT_DATA: ResumeData = {
   projects: { title: 'Projects', list: [{ place: 'Project Name', title: 'Role' }] },
   extraInfo: {
     title: 'Additional Info',
-    list: [{ title: 'Skills', items: ['Item1', 'Item2', 'Item3'] }],
+    list: [{ title: 'Skills:', items: ['Item1', 'Item2', 'Item3'] }],
   },
 }
 
