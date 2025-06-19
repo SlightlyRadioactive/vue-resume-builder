@@ -3,7 +3,7 @@ import { ref, nextTick } from 'vue'
 
 // Components
 import EditField from '@/components/EditField.vue'
-import ContactItem from '@/components/ContactItem.vue'
+import InlineItem from '@/components/InlineItem.vue'
 import EditSection from '@/components/EditSection.vue'
 import ListSection from '@/components/ListSection.vue'
 import EditTextArea from '@/components/EditTextArea.vue'
@@ -110,9 +110,8 @@ const loadJSON = () => {
 }
 
 function safeStructuredClone<T>(obj: T): T {
-  if (typeof structuredClone === 'function') {
-    return structuredClone(obj)
-  }
+  if (typeof structuredClone === 'function') return structuredClone(obj)
+
   return JSON.parse(JSON.stringify(obj))
 }
 </script>
@@ -132,7 +131,7 @@ function safeStructuredClone<T>(obj: T): T {
         <div class="group/add w-full flex flex-col items-center py-1">
           <div>
             <span v-for="(item, index) in data.contacts" :key="index">
-              <ContactItem
+              <InlineItem
                 :text="item"
                 @remove="data.contacts.splice(index, 1)"
                 @update="(value) => (data.contacts[index] = value)"

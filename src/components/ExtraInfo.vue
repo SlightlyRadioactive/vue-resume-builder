@@ -4,7 +4,7 @@ import EditField from './EditField.vue'
 import EditSection from '@/components/EditSection.vue'
 import AddButton from '@/components/AddButton.vue'
 import DelButton from './DelButton.vue'
-import ContactItem from './ContactItem.vue'
+import InlineItem from './InlineItem.vue'
 
 interface InfoEntry {
   title: string
@@ -64,7 +64,7 @@ watch(
         <DelButton @click="removeLine(entryIndex)" />
         <span>:</span>
         <span v-for="(item, index) in entry.items" :key="index">
-          <ContactItem
+          <InlineItem
             :text="item"
             @remove="removeItem(entryIndex, index)"
             @update="(value) => (entry.items[index] = value)"
