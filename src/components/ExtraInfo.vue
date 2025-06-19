@@ -59,7 +59,7 @@ watch(
           class="font-bold"
           :text="entry.title"
           :required="true"
-          @update="(value) => updateList(entryIndex, value)"
+          @update="updateList(entryIndex, $event)"
         />
         <DelButton @click="removeLine(entryIndex)" />
         <span>:</span>
@@ -67,7 +67,7 @@ watch(
           <InlineItem
             :text="item"
             @remove="removeItem(entryIndex, index)"
-            @update="(value) => (entry.items[index] = value)"
+            @update="entry.items[index] = $event"
           />
           <span v-if="index < entry.items.length - 1">|</span>
         </span>

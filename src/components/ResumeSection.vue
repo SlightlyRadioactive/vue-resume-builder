@@ -21,14 +21,14 @@ const list = ref(section.list)
 
 <template>
   <div class="group/add w-full flex flex-col py-1">
-    <EditField @update="(value) => emit('update', value)" :text="text" class="font-bold" />
+    <EditField @update="emit('update', $event)" :text="text" class="font-bold" />
     <hr class="w-full border-1" />
     <EditEntry
-      v-for="(item, idx) in list"
-      :key="idx"
+      v-for="(item, index) in list"
+      :key="index"
       :info="item"
-      @update="(val) => (list[idx] = val)"
-      @remove="list.splice(idx, 1)"
+      @update="list[index] = $event"
+      @remove="list.splice(index, 1)"
     />
     <AddButton @click="list.push(defaultItem)" />
   </div>

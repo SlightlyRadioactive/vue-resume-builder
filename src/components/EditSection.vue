@@ -8,7 +8,7 @@ const props = withDefaults(defineProps<{ text?: string }>(), { text: 'Title' })
 
 <template>
   <div class="group/add w-full flex flex-col py-1">
-    <EditField class="font-bold" :text="props.text" @update="(value) => emit('update', value)" />
+    <EditField class="font-bold" :text="props.text" @update="emit('update', $event)" />
     <hr class="w-full border-1" />
     <slot></slot>
   </div>

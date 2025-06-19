@@ -48,7 +48,7 @@ watch(
       :key="index"
       :info="item"
       @remove="removeItem(index)"
-      @update="(value) => updateList(index, value)"
+      @update="updateList(index, $event)"
     />
     <AddButton @click="emit('add')" />
   </EditSection>

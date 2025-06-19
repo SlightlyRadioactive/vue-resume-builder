@@ -125,7 +125,7 @@ function safeStructuredClone<T>(obj: T): T {
         style="width: 21cm; height: 29.7cm; padding: 1.27cm 1.07cm 0.89cm 1.07cm"
       >
         <!--Name-->
-        <EditField :text="data.name" :required="true" @update="(value) => (data.name = value)" />
+        <EditField :text="data.name" :required="true" @update="data.name = $event" />
         <hr class="w-full border-1" />
 
         <!--Contacts-->
@@ -135,7 +135,7 @@ function safeStructuredClone<T>(obj: T): T {
               <InlineItem
                 :text="item"
                 @remove="data.contacts.splice(index, 1)"
-                @update="(value) => (data.contacts[index] = value)"
+                @update="data.contacts[index] = $event"
               />
               <span v-if="index < data.contacts.length - 1">|</span>
             </span>
@@ -144,7 +144,7 @@ function safeStructuredClone<T>(obj: T): T {
         </div>
 
         <!--Summary-->
-        <EditSection :text="data.summary.title" @update="(value) => (data.summary.title = value)">
+        <EditSection :text="data.summary.title" @update="data.summary.title = $event">
           <EditTextArea v-model="data.summary.text" />
         </EditSection>
 
@@ -152,29 +152,29 @@ function safeStructuredClone<T>(obj: T): T {
         <ListSection
           :data="data.works"
           @add="data.works.list.push(...DEFAULT_DATA.works.list)"
-          @update="(value) => (data.works = value)"
+          @update="data.works = $event"
         />
 
         <!--Education-->
         <ListSection
           :data="data.degrees"
           @add="data.degrees.list.push(...DEFAULT_DATA.degrees.list)"
-          @update="(value) => (data.degrees = value)"
+          @update="data.degrees = $event"
         />
 
         <!--Projects-->
         <ListSection
           :data="data.projects"
           @add="data.projects.list.push(...DEFAULT_DATA.projects.list)"
-          @update="(value) => (data.projects = value)"
+          @update="data.projects = $event"
         />
 
         <!--Additional Info-->
         <ExtraInfo
           :data="data.extraInfo"
           @add="data.extraInfo.list.push(safeStructuredClone(DEFAULT_DATA.extraInfo.list[0]))"
-          @addItem="(value) => data.extraInfo.list[value].items.push('Item')"
-          @update="(value) => (data.extraInfo = value)"
+          @addItem="data.extraInfo.list[$event].items.push('Item')"
+          @update="data.extraInfo = $event"
         />
       </div>
     </div>

@@ -9,7 +9,7 @@ const props = withDefaults(defineProps<{ text?: string }>(), { text: 'Contact' }
 
 <template>
   <span class="group gap-2 rounded-2xl hover:bg-gray-700 p-2">
-    <EditField :text="props.text" @update="(value) => emit('update', value)" />
+    <EditField :text="props.text" @update="emit('update', $event)" />
     <DelButton @click="emit('remove')" />
   </span>
 </template>

@@ -32,28 +32,21 @@ const updateField = (field: InfoKey, value: string) => {
     <div class="w-full group-hover:pe-1">
       <div class="w-full flex justify-between">
         <div class="flex flex-col">
-          <EditField
-            class="font-bold"
-            :text="json.place"
-            @update="(value) => updateField('place', value)"
-          />
-          <EditField :text="json.title" @update="(value) => updateField('title', value)" />
+          <EditField class="font-bold" :text="json.place" @update="updateField('place', $event)" />
+          <EditField :text="json.title" @update="updateField('title', $event)" />
         </div>
         <div class="flex flex-col items-end">
-          <EditField :text="json.location" @update="(value) => updateField('location', value)" />
+          <EditField :text="json.location" @update="updateField('location', $event)" />
           <span>
-            <EditField
-              :text="json.date_start"
-              @update="(value) => updateField('date_start', value)"
-            />
+            <EditField :text="json.date_start" @update="updateField('date_start', $event)" />
             <span> - </span>
-            <EditField :text="json.date_end" @update="(value) => updateField('date_end', value)" />
+            <EditField :text="json.date_end" @update="updateField('date_end', $event)" />
           </span>
         </div>
       </div>
       <EditTextArea
         v-model="json.description"
-        @update:model-value="(value) => updateField('description', value)"
+        @update:model-value="updateField('description', $event)"
       />
     </div>
     <div class="flex">
