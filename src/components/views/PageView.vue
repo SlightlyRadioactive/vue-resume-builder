@@ -9,6 +9,7 @@ import ListSection from '@/components/ListSection.vue'
 import EditTextArea from '@/components/EditTextArea.vue'
 import AddButton from '@/components/AddButton.vue'
 import ExtraInfo from '../ExtraInfo.vue'
+import StdButton from '../StdButton.vue'
 
 // Static data
 interface ResumeEntry {
@@ -179,15 +180,9 @@ function safeStructuredClone<T>(obj: T): T {
     </div>
   </section>
   <div class="flex justify-center pb-20 gap-2">
-    <button type="button" @click="console.log('PDF')" class="btn bg-black hover:bg-gray-800">
-      Download PDF
-    </button>
-    <button type="button" @click="saveJSON" class="btn bg-gray-500 hover:bg-gray-700">
-      Save JSON
-    </button>
-    <button type="button" @click="loadJSON" class="btn bg-gray-500 hover:bg-gray-700">
-      Load JSON
-    </button>
+    <StdButton @click="console.log('PDF')" text="Download PDF" color="black" />
+    <StdButton @click="saveJSON" text="Save JSON" />
+    <StdButton @click="loadJSON" text="Load JSON" />
   </div>
   <footer class="text-center text-gray-500 text-xs">
     <p>Vue Resume Builder</p>
