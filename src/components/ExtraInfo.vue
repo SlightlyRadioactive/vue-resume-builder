@@ -48,20 +48,11 @@ watch(
 </script>
 
 <template>
-  <EditSection
-    class="group/add"
-    :text="info.title"
-    @update="(value) => emit('update', { ...info, title: value })"
-  >
+  <EditSection :text="info.title" @update="(value) => emit('update', { ...info, title: value })">
     <div class="group/add w-full flex flex-col">
       <div v-for="(entry, entryIndex) in info.list" :key="entryIndex">
         <DelButton @click="removeLine(entryIndex)" group="add" />
-        <EditField
-          class="font-bold"
-          :text="entry.title"
-          :required="true"
-          @update="updateList(entryIndex, $event)"
-        />
+        <EditField class="font-bold" :text="entry.title" @update="updateList(entryIndex, $event)" />
         <span v-for="(item, index) in entry.items" :key="index">
           <InlineItem
             :text="item"

@@ -3,10 +3,7 @@ import { ref, nextTick, watch, onMounted } from 'vue'
 
 const emit = defineEmits(['update'])
 
-const props = withDefaults(defineProps<{ text?: string; required?: boolean }>(), {
-  text: 'Description',
-  required: false,
-})
+const props = withDefaults(defineProps<{ text?: string }>(), { text: 'Description' })
 
 const isActive = ref(false)
 const inputWidth = ref('auto')
@@ -65,7 +62,6 @@ onMounted(resizeField)
       ref="inputRef"
       v-show="isActive"
       v-model="inputValue"
-      :required="props.required"
       @input="resizeField"
       @blur="blurInput"
       :style="{ width: inputWidth }"

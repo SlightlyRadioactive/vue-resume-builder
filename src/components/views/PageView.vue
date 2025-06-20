@@ -125,7 +125,7 @@ function safeStructuredClone<T>(obj: T): T {
         style="width: 21cm; height: 29.7cm; padding: 1.27cm 1.07cm 0.89cm 1.07cm"
       >
         <!--Name-->
-        <EditField :text="data.name" :required="true" @update="data.name = $event" />
+        <EditField :text="data.name" @update="data.name = $event" />
         <hr class="w-full border-1" />
 
         <!--Contacts-->
