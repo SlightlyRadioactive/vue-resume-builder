@@ -9,7 +9,7 @@ const props = defineProps<{ group?: string }>()
       'hidden',
       'rounded-2xl',
       'hover:bg-gray-800',
-      `group-hover${props.group ? '/' + props.group : ''}:inline`,
+      props.group ? `group-hover/${props.group}:inline` : 'group-hover:inline',
     ]"
   >
     ❌
