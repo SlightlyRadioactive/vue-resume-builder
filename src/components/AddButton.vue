@@ -1,7 +1,17 @@
 <template>
   <button
     type="button"
-    class="rounded-3xl bg-black text-white px-2 hover:bg-gray-800 font-bold text-lg group-hover/add:inline hidden"
+    :class="[
+      'px-2',
+      'hidden',
+      'text-lg',
+      'font-bold',
+      'bg-black',
+      'rounded-3xl',
+      'text-white',
+      'hover:bg-gray-800',
+      'group-hover/add:inline',
+    ]"
   >
     +
   </button>

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, nextTick } from 'vue'
+import * as util from '@/scripts/util'
 
 // Components
 import EditField from '@/components/EditField.vue'
@@ -11,42 +12,7 @@ import AddButton from '@/components/AddButton.vue'
 import ExtraInfo from '../ExtraInfo.vue'
 import StdButton from '../StdButton.vue'
 
-// Static data
-interface ResumeEntry {
-  place: string
-  title: string
-}
-
-interface InfoEntry {
-  title: string
-  items: string[]
-}
-
-interface ResumeData {
-  name: string
-  contacts: string[]
-  summary: { title: string; text: string }
-  works: { title: string; list: ResumeEntry[] }
-  degrees: { title: string; list: ResumeEntry[] }
-  projects: { title: string; list: ResumeEntry[] }
-  extraInfo: { title: string; list: InfoEntry[] }
-}
-
-const DEFAULT_DATA: ResumeData = {
-  name: 'Your Name',
-  contacts: ['Email', 'Phone', 'Location'],
-  summary: { title: 'Summary', text: 'Description' },
-  works: { title: 'Experience', list: [{ place: 'Company', title: 'Position' }] },
-  degrees: { title: 'Education', list: [{ place: 'Institution', title: 'Degree' }] },
-  projects: { title: 'Projects', list: [{ place: 'Project Name', title: 'Role' }] },
-  extraInfo: {
-    title: 'Additional Info',
-    list: [{ title: 'Skills:', items: ['Item1', 'Item2', 'Item3'] }],
-  },
-}
-
-// Reactive data
-const data = ref(structuredClone(DEFAULT_DATA))
+const data = ref(structuredClone(util.DEFAULT_DATA))
 
 const saveJSON = () => {
   const load_data = JSON.stringify(data.value, null, 2)
@@ -74,26 +40,30 @@ const loadJSON = () => {
           return
         }
         data.value = {
-          ...DEFAULT_DATA,
+          ...util.DEFAULT_DATA,
           ...json,
-          contacts: json.contacts || DEFAULT_DATA.contacts,
-          summary: { ...DEFAULT_DATA.summary, ...json.summary },
+          contacts: json.contacts || util.DEFAULT_DATA.contacts,
+          summary: { ...util.DEFAULT_DATA.summary, ...json.summary },
           works: {
-            ...DEFAULT_DATA.works,
+            ...util.DEFAULT_DATA.works,
             title: json.works?.title || 'Experience',
             list: json.works?.list || [],
           },
           degrees: {
-            ...DEFAULT_DATA.degrees,
+            ...util.DEFAULT_DATA.degrees,
             title: json.degrees?.title || 'Degrees',
             list: json.degrees?.list || [],
           },
           projects: {
-            ...DEFAULT_DATA.projects,
+            ...util.DEFAULT_DATA.projects,
             title: json.projects?.title || 'Projects',
             list: json.projects?.list || [],
           },
-          extraInfo: { ...DEFAULT_DATA.extraInfo, title: json.extraInfo?.title, ...json.extraInfo },
+          extraInfo: {
+            ...util.DEFAULT_DATA.extraInfo,
+            title: json.extraInfo?.title,
+            ...json.extraInfo,
+          },
         }
 
         //Trigger resize for all textareas
@@ -151,28 +121,28 @@ function safeStructuredClone<T>(obj: T): T {
         <!--Experience-->
         <ListSection
           :data="data.works"
-          @add="data.works.list.push(...DEFAULT_DATA.works.list)"
+          @add="data.works.list.push(...util.DEFAULT_DATA.works.list)"
           @update="data.works = $event"
         />
 
         <!--Education-->
         <ListSection
           :data="data.degrees"
-          @add="data.degrees.list.push(...DEFAULT_DATA.degrees.list)"
+          @add="data.degrees.list.push(...util.DEFAULT_DATA.degrees.list)"
           @update="data.degrees = $event"
         />
 
         <!--Projects-->
         <ListSection
           :data="data.projects"
-          @add="data.projects.list.push(...DEFAULT_DATA.projects.list)"
+          @add="data.projects.list.push(...util.DEFAULT_DATA.projects.list)"
           @update="data.projects = $event"
         />
 
         <!--Additional Info-->
         <ExtraInfo
           :data="data.extraInfo"
-          @add="data.extraInfo.list.push(safeStructuredClone(DEFAULT_DATA.extraInfo.list[0]))"
+          @add="data.extraInfo.list.push(safeStructuredClone(util.DEFAULT_DATA.extraInfo.list[0]))"
           @addItem="data.extraInfo.list[$event].items.push('Item')"
           @update="data.extraInfo = $event"
         />

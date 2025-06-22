@@ -1,26 +1,18 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
+import type { ListEntry, LongInfo } from '@/scripts/util'
 import EditSection from '@/components/EditSection.vue'
 import EditEntry from '@/components/EditEntry.vue'
 import AddButton from '@/components/AddButton.vue'
 
-type ListItemKeys = 'place' | 'title' | 'date_end' | 'date_start' | 'description' | 'location'
-
-type ListItem = { [K in ListItemKeys]?: string }
-
-interface Data {
-  title?: string
-  list?: ListItem[]
-}
-
-const props = withDefaults(defineProps<{ data: Data }>(), {
+const props = withDefaults(defineProps<{ data: LongInfo }>(), {
   data: () => ({ title: 'Title', list: [] }),
 })
 
 const emit = defineEmits(['add', 'update'])
 const info = ref({ ...props.data })
 
-const updateList = (index: number, value: ListItem): void => {
+const updateList = (index: number, value: ListEntry): void => {
   const newList = info.value.list ? [...info.value.list] : []
   newList[index] = value
   emit('update', { ...info.value, list: newList })
@@ -33,7 +25,7 @@ const removeItem = (index: number): void => {
 
 watch(
   () => props.data,
-  (newData: Data) => (info.value = { ...newData }),
+  (newData) => (info.value = { ...newData }),
 )
 </script>
 

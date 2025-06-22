@@ -1,17 +1,15 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
+import type { ListEntry, ItemKey } from '@/scripts/util'
 import EditField from '@/components/EditField.vue'
 import EditTextArea from '@/components/EditTextArea.vue'
 import DelButton from '@/components/DelButton.vue'
 
 const emit = defineEmits(['remove', 'update'])
 
-type InfoKey = 'place' | 'title' | 'location' | 'date_start' | 'date_end' | 'description'
-type Info = Partial<Record<InfoKey, string>>
+const props = withDefaults(defineProps<{ info?: ListEntry }>(), { info: () => ({}) })
 
-const props = withDefaults(defineProps<{ info?: Info }>(), { info: () => ({}) })
-
-const defaults: Record<InfoKey, string> = {
+const defaults: ListEntry = {
   place: 'Place',
   title: 'Title',
   location: 'Location, FS',
@@ -22,7 +20,7 @@ const defaults: Record<InfoKey, string> = {
 
 const json = computed(() => ({ ...defaults, ...props.info }))
 
-const updateField = (field: InfoKey, value: string) => {
+const updateField = (field: ItemKey, value: string) => {
   emit('update', { ...json.value, [field]: value })
 }
 </script>

@@ -1,22 +1,13 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
+import type { ShortInfo } from '@/scripts/util'
 import EditField from './EditField.vue'
 import EditSection from '@/components/EditSection.vue'
 import AddButton from '@/components/AddButton.vue'
 import DelButton from './DelButton.vue'
 import InlineItem from './InlineItem.vue'
 
-interface InfoEntry {
-  title: string
-  items: string[]
-}
-
-interface Data {
-  title?: string
-  list?: InfoEntry[]
-}
-
-const props = withDefaults(defineProps<{ data: Data }>(), {
+const props = withDefaults(defineProps<{ data: ShortInfo }>(), {
   data: () => ({ title: 'Title', list: [] }),
 })
 
@@ -43,7 +34,7 @@ const removeItem = (entryIndex: number, itemIndex: number): void => {
 
 watch(
   () => props.data,
-  (newData: Data) => (info.value = { ...newData }),
+  (newData) => (info.value = { ...newData }),
 )
 </script>
 
