@@ -63,7 +63,7 @@ npm run preview
 ## 🛠️ To do
 
 - [x] ~~Turn the "Additional info" section into its own component~~
-- [x] Add the option to toggle sections visibility
+- [x] ~~Add the option to toggle sections visibility~~
 - [ ] Add the option to toggle list items within sections visibility
 - [ ] Add the option to download resume as a pdf file
 - [ ] Add the option to rearrange sections
