@@ -37,6 +37,7 @@ watch(
   >
     <EditEntry
       v-for="(item, index) in info.list"
+      class="py-1"
       :key="index"
       :info="item"
       @remove="removeItem(index)"

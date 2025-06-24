@@ -47,7 +47,7 @@ const updateField = (field: ItemKey, value: string) => {
         @update:model-value="updateField('description', $event)"
       />
     </div>
-    <div class="flex">
+    <div class="flex print:hidden">
       <DelButton @click="emit('remove')" />
     </div>
   </div>
