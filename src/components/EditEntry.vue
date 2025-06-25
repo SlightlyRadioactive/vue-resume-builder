@@ -1,13 +1,16 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import type { ListEntry, ItemKey } from '@/scripts/util'
 import EditField from '@/components/EditField.vue'
 import EditTextArea from '@/components/EditTextArea.vue'
 import DelButton from '@/components/DelButton.vue'
+import ToggleButton from '@/components/ToggleButton.vue'
 
 const emit = defineEmits(['remove', 'update'])
 
 const props = withDefaults(defineProps<{ info?: ListEntry }>(), { info: () => ({}) })
+
+const isVisible = ref(true)
 
 const defaults: ListEntry = {
   place: 'Place',
@@ -26,8 +29,9 @@ const updateField = (field: ItemKey, value: string) => {
 </script>
 
 <template>
-  <div class="group flex columns-2">
-    <div class="w-full group-hover:pe-1">
+  <div :class="`group flex columns-2 ${isVisible ? '' : 'text-black/30 print:hidden'}`">
+    <ToggleButton :show="isVisible" @update="isVisible = $event" />
+    <div class="w-full group-hover:px-1">
       <div class="w-full flex justify-between">
         <div class="flex flex-col">
           <EditField class="font-bold" :text="json.place" @update="updateField('place', $event)" />
@@ -47,8 +51,6 @@ const updateField = (field: ItemKey, value: string) => {
         @update:model-value="updateField('description', $event)"
       />
     </div>
-    <div class="flex print:hidden">
-      <DelButton @click="emit('remove')" />
-    </div>
+    <DelButton @click="emit('remove')" />
   </div>
 </template>

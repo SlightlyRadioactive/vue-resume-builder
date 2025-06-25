@@ -1,23 +1,30 @@
 <script lang="ts" setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
-const props = defineProps<{ group?: string }>()
+const props = withDefaults(defineProps<{ container?: 'div' | 'span'; group?: string }>(), {
+  container: 'div',
+})
 </script>
 
 <template>
-  <button
-    type="button"
-    :class="[
-      'px-1',
-      'hidden',
-      'rounded-2xl',
-      'print:hidden',
-      'text-white',
-      'bg-red-600',
-      'hover:bg-red-800',
-      props.group ? `group-hover/${props.group}:inline` : 'group-hover:inline',
-    ]"
+  <component
+    :is="props.container"
+    :class="`${props.container == 'div' ? 'flex' : ''} print:hidden`"
   >
-    <FontAwesomeIcon class="text-lg" :icon="faTrashCan" />
-  </button>
+    <button
+      type="button"
+      :class="[
+        'px-1',
+        'hidden',
+        'rounded-2xl',
+        'print:hidden',
+        'text-white',
+        'bg-red-600',
+        'hover:bg-red-800',
+        props.group ? `group-hover/${props.group}:inline` : 'group-hover:inline',
+      ]"
+    >
+      <FontAwesomeIcon :icon="faTrashCan" />
+    </button>
+  </component>
 </template>

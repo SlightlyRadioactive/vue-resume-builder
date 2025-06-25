@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import EditField from '@/components/EditField.vue'
+import ToggleButton from '@/components/ToggleButton.vue'
 
 const emit = defineEmits(['update'])
 
@@ -19,14 +18,7 @@ const isVisible = ref(props.show)
     :class="`group/add w-full flex flex-col py-1 ${isVisible ? '' : 'text-black/30 print:hidden'}`"
   >
     <span>
-      <button
-        type="button"
-        @click="isVisible = !isVisible"
-        class="hidden px-1 rounded-2xl text-white hover:bg-gray-800 group-hover/add:inline print:hidden"
-      >
-        <FontAwesomeIcon v-if="isVisible" :icon="faEyeSlash" />
-        <FontAwesomeIcon v-else :icon="faEye" />
-      </button>
+      <ToggleButton container="span" :show="isVisible" group="add" @update="isVisible = $event" />
       <EditField class="font-bold" :text="props.text" @update="emit('update', $event)" />
     </span>
     <hr class="w-full border-1" />

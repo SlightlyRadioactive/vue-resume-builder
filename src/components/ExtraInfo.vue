@@ -42,7 +42,7 @@ watch(
   <EditSection :text="info.title" @update="(value) => emit('update', { ...info, title: value })">
     <div class="group/add w-full flex flex-col">
       <div v-for="(entry, entryIndex) in info.list" :key="entryIndex">
-        <DelButton @click="removeLine(entryIndex)" group="add" />
+        <DelButton container="span" @click="removeLine(entryIndex)" group="add" />
         <EditField class="font-bold" :text="entry.title" @update="updateList(entryIndex, $event)" />
         <span v-for="(item, index) in entry.items" :key="index">
           <InlineItem
@@ -52,7 +52,7 @@ watch(
           />
           <span v-if="index < entry.items.length - 1">|</span>
         </span>
-        <AddButton @click="emit('addItem', entryIndex)" />
+        <AddButton container="span" @click="emit('addItem', entryIndex)" />
       </div>
       <AddButton @click="emit('add')" />
     </div>

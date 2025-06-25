@@ -109,7 +109,7 @@ function safeStructuredClone<T>(obj: T): T {
               />
               <span v-if="index < data.contacts.length - 1">|</span>
             </span>
-            <AddButton @click="data.contacts.push('Contact')" />
+            <AddButton container="span" @click="data.contacts.push('Contact')" />
           </div>
         </div>
 
