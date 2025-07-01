@@ -48,16 +48,19 @@ const loadJSON = () => {
             ...util.DEFAULT_DATA.works,
             title: json.works?.title || 'Experience',
             list: json.works?.list || [],
+            isVisible: json.works?.isVisible,
           },
           degrees: {
             ...util.DEFAULT_DATA.degrees,
             title: json.degrees?.title || 'Degrees',
             list: json.degrees?.list || [],
+            isVisible: json.degrees?.isVisible,
           },
           projects: {
             ...util.DEFAULT_DATA.projects,
             title: json.projects?.title || 'Projects',
             list: json.projects?.list || [],
+            isVisible: json.projects?.isVisible,
           },
           extraInfo: {
             ...util.DEFAULT_DATA.extraInfo,
@@ -85,6 +88,10 @@ function safeStructuredClone<T>(obj: T): T {
 
   return JSON.parse(JSON.stringify(obj))
 }
+
+document.addEventListener('click', () => {
+  console.log(JSON.stringify(data.value, null, 2))
+})
 </script>
 
 <template>
@@ -103,18 +110,30 @@ function safeStructuredClone<T>(obj: T): T {
           <div>
             <span v-for="(item, index) in data.contacts" :key="index">
               <InlineItem
-                :text="item"
+                :data="item"
                 @remove="data.contacts.splice(index, 1)"
                 @update="data.contacts[index] = $event"
               />
-              <span v-if="index < data.contacts.length - 1">|</span>
+              <span
+                v-if="index < data.contacts.length - 1"
+                :class="`${item.isVisible ? '' : 'text-black/30 print:hidden'}`"
+                >|</span
+              >
             </span>
-            <AddButton container="span" @click="data.contacts.push('Contact')" />
+            <AddButton
+              container="span"
+              @click="data.contacts.push(safeStructuredClone(util.DEFAULT_DATA.contacts[3]))"
+            />
           </div>
         </div>
 
         <!--Summary-->
-        <EditSection :text="data.summary.title" @update="data.summary.title = $event">
+        <EditSection
+          :text="data.summary.title"
+          :show="data.summary.isVisible"
+          @update:title="data.summary.title = $event"
+          @update:isVisible="data.summary.isVisible = $event"
+        >
           <EditTextArea v-model="data.summary.text" />
         </EditSection>
 
@@ -143,7 +162,11 @@ function safeStructuredClone<T>(obj: T): T {
         <ExtraInfo
           :data="data.extraInfo"
           @add="data.extraInfo.list.push(safeStructuredClone(util.DEFAULT_DATA.extraInfo.list[0]))"
-          @addItem="data.extraInfo.list[$event].items.push('Item')"
+          @addItem="
+            data.extraInfo.list[$event].items.push(
+              safeStructuredClone(util.DEFAULT_DATA.extraInfo.list[0].items[0]),
+            )
+          "
           @update="data.extraInfo = $event"
         />
       </div>

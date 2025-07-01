@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
-const props = withDefaults(defineProps<{ container?: 'div' | 'span'; group?: string }>(), {
+
+const props = withDefaults(defineProps<{ container?: 'div' | 'span'; addStyle?: string }>(), {
   container: 'div',
 })
 </script>
@@ -21,7 +22,7 @@ const props = withDefaults(defineProps<{ container?: 'div' | 'span'; group?: str
         'text-white',
         'bg-red-600',
         'hover:bg-red-800',
-        props.group ? `group-hover/${props.group}:inline` : 'group-hover:inline',
+        props.addStyle ?? 'group-hover:inline',
       ]"
     >
       <FontAwesomeIcon :icon="faTrashCan" />

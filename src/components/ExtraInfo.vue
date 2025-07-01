@@ -1,22 +1,24 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import type { ShortInfo } from '@/scripts/util'
-import EditField from './EditField.vue'
+import EditField from '@/components/EditField.vue'
 import EditSection from '@/components/EditSection.vue'
 import AddButton from '@/components/AddButton.vue'
-import DelButton from './DelButton.vue'
-import InlineItem from './InlineItem.vue'
+import DelButton from '@/components/DelButton.vue'
+import ToggleButton from '@/components/ToggleButton.vue'
+import InlineItem from '@/components/InlineItem.vue'
 
 const props = withDefaults(defineProps<{ data: ShortInfo }>(), {
-  data: () => ({ title: 'Title', list: [] }),
+  data: () => ({ title: 'Title', list: [], isVisible: true }),
 })
 
 const emit = defineEmits(['add', 'addItem', 'update'])
 const info = ref({ ...props.data })
 
-const updateList = (index: number, value: string): void => {
+const updateList = (index: number, value: string | boolean): void => {
   const newList = info.value.list ? [...info.value.list] : []
-  newList[index].title = value
+  if (typeof value == 'string') newList[index].title = value
+  else if (typeof value == 'boolean') newList[index].isVisible = value
   emit('update', { ...info.value, list: newList })
 }
 
@@ -39,18 +41,36 @@ watch(
 </script>
 
 <template>
-  <EditSection :text="info.title" @update="(value) => emit('update', { ...info, title: value })">
-    <div class="group/add w-full flex flex-col">
-      <div v-for="(entry, entryIndex) in info.list" :key="entryIndex">
-        <DelButton container="span" @click="removeLine(entryIndex)" group="add" />
+  <EditSection
+    :text="info.title"
+    :show="info.isVisible"
+    @update:title="emit('update', { ...info, title: $event })"
+    @update:is-visible="emit('update', { ...info, isVisible: $event })"
+  >
+    <div class="w-full flex flex-col">
+      <div
+        v-for="(entry, entryIndex) in info.list"
+        :key="entryIndex"
+        :class="['group', entry.isVisible ? '' : 'text-black/30 print:hidden']"
+      >
+        <ToggleButton
+          container="span"
+          :show="entry.isVisible"
+          @update="updateList(entryIndex, $event)"
+        />
         <EditField class="font-bold" :text="entry.title" @update="updateList(entryIndex, $event)" />
+        <DelButton container="span" @click="removeLine(entryIndex)" />
         <span v-for="(item, index) in entry.items" :key="index">
           <InlineItem
-            :text="item"
-            @remove="removeItem(entryIndex, index)"
+            :data="item"
             @update="entry.items[index] = $event"
+            @remove="removeItem(entryIndex, index)"
           />
-          <span v-if="index < entry.items.length - 1">|</span>
+          <span
+            v-if="index < entry.items.length - 1"
+            :class="`${item.isVisible ? '' : 'text-black/30 print:hidden'}`"
+            >|</span
+          >
         </span>
         <AddButton container="span" @click="emit('addItem', entryIndex)" />
       </div>

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import type { ListEntry, LongInfo } from '@/scripts/util'
+import type { ListItem, LongInfo } from '@/scripts/util'
 import EditSection from '@/components/EditSection.vue'
 import EditEntry from '@/components/EditEntry.vue'
 import AddButton from '@/components/AddButton.vue'
@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{ data: LongInfo }>(), {
 const emit = defineEmits(['add', 'update'])
 const info = ref({ ...props.data })
 
-const updateList = (index: number, value: ListEntry): void => {
+const updateList = (index: number, value: ListItem): void => {
   const newList = info.value.list ? [...info.value.list] : []
   newList[index] = value
   emit('update', { ...info.value, list: newList })
@@ -31,15 +31,17 @@ watch(
 
 <template>
   <EditSection
-    class="group/add"
+    class="group"
     :text="info.title"
-    @update="(value) => emit('update', { ...info, title: value })"
+    :show="info.isVisible"
+    @update:title="emit('update', { ...info, title: $event })"
+    @update:is-visible="emit('update', { ...info, isVisible: $event })"
   >
     <EditEntry
       v-for="(item, index) in info.list"
-      class="py-1"
       :key="index"
       :info="item"
+      class="py-1"
       @remove="removeItem(index)"
       @update="updateList(index, $event)"
     />

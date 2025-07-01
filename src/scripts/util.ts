@@ -1,25 +1,15 @@
 export type ItemKey = 'title' | 'place' | 'date_end' | 'date_start' | 'location' | 'description'
-export type ListEntry = { [K in ItemKey]?: string }
+export type ListItem = { [K in ItemKey]?: string } & { isVisible?: boolean }
+export type LongInfo = { title: string; list: ListItem[]; isVisible?: boolean }
 
-export interface InfoEntry {
-  title: string
-  items: string[]
-}
+export type InlineItem = { content?: string; isVisible?: boolean }
+export type LineItem = { title: string; items: InlineItem[]; isVisible?: boolean }
+export type ShortInfo = { title: string; list: LineItem[]; isVisible?: boolean }
 
-export interface LongInfo {
-  title: string
-  list: ListEntry[]
-}
-
-export interface ShortInfo {
-  title: string
-  list: InfoEntry[]
-}
-
-export interface ResumeData {
+export type ResumeData = {
   name: string
-  contacts: string[]
-  summary: { title: string; text: string }
+  contacts: InlineItem[]
+  summary: { title: string; text: string; isVisible: boolean }
   works: LongInfo
   degrees: LongInfo
   projects: LongInfo
@@ -28,13 +18,41 @@ export interface ResumeData {
 
 export const DEFAULT_DATA: ResumeData = {
   name: 'Your Name',
-  contacts: ['Email', 'Phone', 'Location'],
-  summary: { title: 'Summary', text: 'Description' },
-  works: { title: 'Experience', list: [{ place: 'Company', title: 'Position' }] },
-  degrees: { title: 'Education', list: [{ place: 'Institution', title: 'Degree' }] },
-  projects: { title: 'Projects', list: [{ place: 'Project Name', title: 'Role' }] },
+  contacts: [
+    { content: 'Email', isVisible: true },
+    { content: 'Phone', isVisible: true },
+    { content: 'Location', isVisible: true },
+    { content: 'Contact', isVisible: true },
+  ],
+  summary: { title: 'Summary', text: 'Description', isVisible: true },
+  works: {
+    title: 'Experience',
+    list: [{ place: 'Company', title: 'Position', isVisible: true }],
+    isVisible: true,
+  },
+  degrees: {
+    title: 'Education',
+    list: [{ place: 'Institution', title: 'Degree', isVisible: true }],
+    isVisible: true,
+  },
+  projects: {
+    title: 'Projects',
+    list: [{ place: 'Project Name', title: 'Role', isVisible: true }],
+    isVisible: true,
+  },
   extraInfo: {
     title: 'Additional Info',
-    list: [{ title: 'Skills:', items: ['Item1', 'Item2', 'Item3'] }],
+    list: [
+      {
+        title: 'Skills:',
+        items: [
+          { content: 'Item', isVisible: true },
+          { content: 'Item2', isVisible: true },
+          { content: 'Item3', isVisible: true },
+        ],
+        isVisible: true,
+      },
+    ],
+    isVisible: true,
   },
 }

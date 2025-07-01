@@ -6,7 +6,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 const emit = defineEmits(['update'])
 
 const props = withDefaults(
-  defineProps<{ container?: 'div' | 'span'; group?: string; show?: boolean }>(),
+  defineProps<{ container?: 'div' | 'span'; addStyle?: string; show?: boolean }>(),
   { container: 'div', show: true },
 )
 const isVisible = ref(props.show)
@@ -33,7 +33,7 @@ watch(
         'text-white',
         'bg-gray-600',
         'hover:bg-gray-800',
-        props.group ? `group-hover/${props.group}:inline` : 'group-hover:inline',
+        props.addStyle ?? 'group-hover:inline',
       ]"
     >
       <FontAwesomeIcon v-if="isVisible" :icon="faEyeSlash" />

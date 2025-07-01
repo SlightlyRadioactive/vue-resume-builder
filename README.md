@@ -65,12 +65,12 @@ npm run preview
 - [x] ~~Turn the "Additional info" section into its own component~~
 - [x] ~~Add the option to toggle sections visibility~~
 - [x] ~~Add the option to toggle list items within sections visibility~~
-- [ ] Add the visibility preferences for items and sections into the saved JSON files
+- [x] ~~Add the visibility preferences for items and sections into the saved JSON files~~
 - [ ] Add the option to download resume as a pdf file
 - [ ] Add the option to rearrange sections
 - [ ] Add the option to rearrange lists within sections
 - [ ] Use localStorage to make changes persist if the user closes the page
-- [ ] Add option to discard resume completely and begin from the beginning
+- [ ] Add option to discard resume completely and start from the beginning
 - [ ] Add full keyboard support for navigation or maybe direct JSON editing inside the page
 - [ ] Add confirmation requests when deleting sections
 - [ ] Add warnings for when resume's content starts occupying more than one page
