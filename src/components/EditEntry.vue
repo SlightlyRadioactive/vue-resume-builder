@@ -35,9 +35,13 @@ const updateVisibility = (value: boolean) => {
 </script>
 
 <template>
-  <div :class="`group flex columns-2 ${isVisible ? '' : 'text-black/30 print:hidden'}`">
-    <ToggleButton :show="isVisible" @update="updateVisibility($event)" />
-    <div class="w-full group-hover:px-1">
+  <div :class="`group/entry flex columns-2 ${isVisible ? '' : 'text-black/30 print:hidden'}`">
+    <ToggleButton
+      :show="isVisible"
+      addStyle="group-hover/entry:inline"
+      @update="updateVisibility($event)"
+    />
+    <div class="w-full group-hover/entry:px-1">
       <div class="w-full flex justify-between">
         <div class="flex flex-col">
           <EditField class="font-bold" :text="json.place" @update="updateField('place', $event)" />
@@ -57,6 +61,6 @@ const updateVisibility = (value: boolean) => {
         @update:model-value="updateField('description', $event)"
       />
     </div>
-    <DelButton @click="emit('remove')" />
+    <DelButton @click="emit('remove')" addStyle="group-hover/list:inline" />
   </div>
 </template>

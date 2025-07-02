@@ -88,10 +88,6 @@ function safeStructuredClone<T>(obj: T): T {
 
   return JSON.parse(JSON.stringify(obj))
 }
-
-document.addEventListener('click', () => {
-  console.log(JSON.stringify(data.value, null, 2))
-})
 </script>
 
 <template>
